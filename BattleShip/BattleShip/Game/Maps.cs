@@ -4,17 +4,10 @@ using BattleShip.Engine.Interfaces;
 using BattleShip.Game.GameObjects;
 using SFML.Graphics;
 using SFML.System;
-using SFML.Window;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BattleShip.Game
 {
-    public class Grid : GameObject ,IDrawable
+    public class Maps : GameObject ,IDrawable
     {
         private int gridSize = 10;
         private int cellSize = 30;
@@ -23,8 +16,8 @@ namespace BattleShip.Game
         private uint textSize = 20;
         private int mapOffset = 100;
 
-        private Cell[,] player1Cells;
-        private Cell[,] player2Cells;
+        public Cell[,] player1Cells;
+        public Cell[,] player2Cells;
         private Random random = new Random();
         private RenderWindow scene;
 
@@ -32,8 +25,9 @@ namespace BattleShip.Game
         private Text[,] player2Cellstext;
         private Font font;
 
-        public Grid(RenderWindow _scene) : base(_scene)
+        public Maps(int _shipsCount, RenderWindow _scene) : base(_scene)
         {
+            shipsCount = _shipsCount;
             scene = _scene;
 
             player1Cells = new Cell[gridSize, gridSize];
@@ -43,17 +37,25 @@ namespace BattleShip.Game
             player2Cellstext = new Text[gridSize, gridSize];
             font = font.LoadFromFile("arial.ttf");
 
-            GenerateField(0, 0, player1Cells);
-            GenerateText(player1Cellstext, player1Cells);
-            GenerateShips(player1Cells);
             
-            GenerateField(500, 0, player2Cells);
-            GenerateText(player2Cellstext, player2Cells);
-            GenerateShips(player2Cells);
 
             GameLoop.drawableObjects.Add(this);
         }
-        
+        public void Start()
+        {
+            GenerateField(0, 0, player1Cells);
+            GenerateText(player1Cellstext, player1Cells);
+            GenerateShips(player1Cells);
+
+            GenerateField(500, 0, player2Cells);
+            GenerateText(player2Cellstext, player2Cells);
+            GenerateShips(player2Cells);
+            RevielShips(player1Cells);
+
+
+        }
+
+
         private void GenerateField(int _x, int _y, Cell[,] cells)
         {
             for (int x = 0; x < gridSize; x++)
@@ -102,6 +104,32 @@ namespace BattleShip.Game
                 scene.Draw(player1Cellstext[0, i]);
                 scene.Draw(player2Cellstext[i, 0]);
                 scene.Draw(player2Cellstext[0, i]);
+            }
+        }
+        public void RevielShips(Cell[,] cells)
+        {
+            for (int i = 0; i < gridSize; i++)
+            {
+                for (int j = 0; j < gridSize; j++)
+                {
+                    if (cells[i, j] != null)
+                    {
+                        cells[i, j].ShowShip();
+                    }
+                }
+            }
+        }
+        public void HideShips(Cell[,] cells)
+        {
+            for (int i = 0; i < gridSize; i++)
+            {
+                for (int j = 0; j < gridSize; j++)
+                {
+                    if (cells[i, j] != null)
+                    {
+                        cells[i, j].HideShip();
+                    }
+                }
             }
         }
     }

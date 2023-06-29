@@ -23,9 +23,7 @@ namespace BattleShip.Engine
 
         public Vector2u mapSize;
 
-        //private Game.BattleShip game;
-
-        private Grid grid;
+        private Game.BattleShip game;
 
         private InputHandler input;
         public AudioSystem audioSystem;
@@ -56,8 +54,7 @@ namespace BattleShip.Engine
 
             input = new InputHandler(scene);
 
-            //game = new Game.BattleShip(shipAmount, scene);
-            grid = new Grid(scene);
+            game = new Game.BattleShip(shipAmount, scene);
 
             scene.DispatchEvents();
 
